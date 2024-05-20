@@ -1,63 +1,72 @@
 function playRound(userInput, computerInput) {
-if (userInput.toLowerCase()=="rock" && computerInput=="scissors" || userInput.toLowerCase()=="paper" && computerInput=="rock" || userInput.toLowerCase()=="scissors" && computerInput=="paper"){
-   scoreUser++;
-  return win;
-}
-else if (userInput.toLowerCase()=="rock" && computerInput=="paper" || userInput.toLowerCase()=="scissors" && computerInput=="rock" || userInput.toLowerCase()=="paper" && computerInput=="scissors"){
-  scoreComputer++;
-  return lose;
-}
-  else if (userInput.toLowerCase() == computerInput){
- tieScore++;
-  return tie;
-} //if player input rock compare to rock, its a tie
-else {
-  return "you must input rock, paper or scissors";
+  userInput = userInput.toLowerCase(); 
 
-} //else if player input paper compare to rock, you win
+  if ((userInput == "rock" && computerInput == "scissors") ||
+      (userInput == "paper" && computerInput == "rock") ||
+      (userInput == "scissors" && computerInput == "paper")) {
+    scoreUser++;
+    return "You win!";
+    
+  } else if ((userInput == "rock" && computerInput == "paper") ||
+             (userInput == "scissors" && computerInput == "rock") ||
+             (userInput == "paper" && computerInput == "scissors")) {
+    scoreComputer++;
+    return "You lose!";
+
+  } else (userInput == computerInput);
+    tieScore++;
+    return "It's a tie!";
+
+  
 }
 
-
+function getRandomChoice() {
+  const choices = ["rock", "paper", "scissors"];
+  const randomIndex = Math.floor(Math.random() * choices.length);
+  return choices[randomIndex];
+}
 
 let scoreUser = 0;
 let scoreComputer = 0;
 let tieScore = 0;
+const winningScore = 5;
 
-const win = "You win this round!"
-const lose = "You lose this round!"
-const tie = "This round is a tie!"
-
-
-  function game() {
-    
-    for (let i = 0; i <3 ; i++){
-    const userInput = prompt("Do you choose rock, paper or scissors?");
-if (userInput === "paper" || userInput === "rock" || userInput === "scissors") {
-  console.log("You chose " + `${userInput}`);
-} else {
-  console.log("Error! Try again!");
+function updateScores() {
+  document.getElementById('userScore').textContent = scoreUser;
+  document.getElementById('computerScore').textContent = scoreComputer;
+  document.getElementById('tieScore').textContent = tieScore;
 }
-choices = ["rock", "paper", "scissors"];
-let computerInput = choices[Math.floor(Math.random()*choices.length)];
-console.log("Computer chose" + ` ${computerInput}`);
 
-    console.log(playRound(userInput,computerInput));
+function handleButtonClick(event) {
+  const userInput = event.target.textContent.toLowerCase();
+  const computerInput = getRandomChoice();
+  const result = playRound(userInput, computerInput);
+  document.getElementById('result').textContent = `You chose: ${userInput}, Computer chose: ${computerInput}. ${result}`;
+  updateScores();
+  checkForWinner();
 }
-    
-if (scoreUser>scoreComputer){
-  return "You Win this game.\n -------";
-}
-  if (scoreUser==scoreComputer){
-    return "This game is a tie.\n -------";
+document.getElementById('rockButton').addEventListener('click', handleButtonClick);
+document.getElementById('paperButton').addEventListener('click', handleButtonClick);
+document.getElementById('scissorsButton').addEventListener('click', handleButtonClick);
+
+
+
+function checkForWinner() {
+  if (scoreUser >= winningScore) {
+    alert("Congratulations! You are the winner!");
+    resetGame();
+  } else if (scoreComputer >= winningScore) {
+    alert("Sorry, the computer wins this time.");
+    resetGame();
   }
- else{
-  return "You Lose this game.\n -------";
 }
- 
-}
-  
-      console.log(game());
-      console.log( "Your final score is " +scoreUser +" wins " +scoreComputer+" loses and " +tieScore +" draws.\n -------");
-      score=scoreUser+scoreComputer+tieScore;
 
-      console.log("You played this game " +score +" times.\n -------\nGame over.");
+function resetGame() {
+  scoreUser = 0;
+  scoreComputer = 0;
+  tieScore = 0;
+  updateScores();
+}
+
+
+  
